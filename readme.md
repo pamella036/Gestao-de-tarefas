@@ -38,7 +38,7 @@
 ### - Cadastro de novas tarefas
 ### - Edição de tarefas existentes
 ### - Exclusão de tarefas 
-### - Filtrospor título e status
+### - Filtros por título e status
 ### - Feedback de lista vazia
 
 
