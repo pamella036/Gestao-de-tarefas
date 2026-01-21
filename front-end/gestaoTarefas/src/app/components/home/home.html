@@ -1,0 +1,128 @@
+<!-- HEADER -->
+<div class="header">
+  <div class="header-conteiner">
+    <div class="titulo">
+      <img src="/icones/icone-header.png" alt="icone-header" class="icone-header" />
+      <div class="texto-header">
+        <h1>Gerenciador de tarefas</h1>
+       <p>{{ contadorConcluidas }}</p>
+      </div>
+    </div>
+    <button class="novaTarefa" (click)="abrirModal()">
+      <img src="/icones/icone-novaTarefa.png" alt="icone-mais" /> Nova tarefa
+    </button>
+  </div>
+</div>
+
+<!-- CONTEINER -->
+<div class="conteiner">
+
+  <!-- ALERTAS -->
+<div class="alerta-sucesso" *ngIf="mensagemFeedback">
+    {{ mensagemFeedback }}
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filtros">
+    <div class="search">
+      <input
+        [(ngModel)]="filtroTitulo"
+        class="input-buscar"
+        type="text"
+        name="search"
+        id="search"
+        placeholder="Buscar por título..."
+      />
+    </div>
+    <div class="status">
+      <select [(ngModel)]="filtroStatus" name="types" id="types">
+        <option value="" selected disabled>Todos os status</option>
+        <option value="Pendente">Pendente</option>
+        <option value="Em-andamento">Em andamento</option>
+        <option value="Concluída">Concluída</option>
+      </select>
+    </div>
+  </div>
+
+    <!-- NENHUMA TAREFA CRIADA  -->
+<div class="container-vazio" *ngIf="tarefasFiltradas.length === 0">
+  <img src="/icones/icone-mensagemVazia.png" alt="Nenhuma tarefa" class="img-vazio" />
+  <p>Nenhuma tarefa encontrada. Crie sua primeira tarefa!</p>
+</div>
+
+<!-- CARD DAS TAREFAS -->
+  <div class="card-tarefas" *ngFor="let tarefa of tarefasFiltradas; let i = index">
+    <div class="titulo-tarefa">
+      <h3>{{ tarefa.titulo }}</h3>
+      <p
+        class="status-tarefa"
+        [ngClass]="{
+          'status-pendente': tarefa.status === 'Pendente',
+          'status-andamento': tarefa.status === 'Em andamento',
+          'status-concluida': tarefa.status === 'Concluída'
+        }"
+      >
+        {{ tarefa.status || 'Pendente' }}
+      </p>
+      <div class="editar-exluir">
+        <button class="acao excluir" (click)="excluirTarefa(tarefa.id)">
+          <img src="/icones/icone-excluir.png" alt="excluir" />
+        </button>
+        <button class="acao editar" (click)="abrirEdicao(tarefa)">
+          <img src="/icones/icone-editar.png" alt="editar" />
+        </button>
+      </div>
+    </div>
+    <div class="descricao-tarefa">
+      <p>{{ tarefa.descricao }}</p>
+    </div>
+    <div class="data-tarefa">
+      <img src="/icones/icone-calendario.png" alt="icone-calendario" />
+      <p class="data-texto">{{ tarefa.data }}</p>
+    </div>
+  </div>
+
+  <!-- MODAL - CRIAR E EDITAR TAREFA -->
+  <div class="modal-formulario" *ngIf="exibirModal">
+    <h2>{{ editando ? 'Editar tarefa' : 'Nova tarefa' }}</h2>
+
+    <div class="input-group">
+      <p>Título<span>*</span></p>
+      <input
+        [(ngModel)]="novaTarefa.titulo"
+        class="titulo"
+        type="text"
+        placeholder="Digite o título da tarefa"
+      />
+    </div>
+
+    <div class="input-group">
+      <p>Descrição</p>
+      <textarea
+        [(ngModel)]="novaTarefa.descricao"
+        class="descricao"
+        placeholder="Descreva os detalhes da tarefa"
+      ></textarea>
+    </div>
+
+    <div class="input-group">
+      <p>Status</p>
+      <select [(ngModel)]="novaTarefa.status" name="status" id="status">
+        <option value="Pendente">Pendente</option>
+        <option value="Em andamento">Em andamento</option>
+        <option value="Concluída">Concluída</option>
+      </select>
+    </div>
+
+    <div class="button-container">
+      <button class="cancelar" (click)="fecharModal()">Cancelar</button>
+      <button (click)="salvarTarefa()" class="criarTarefa">
+        {{ editando ? 'Salvar alterações' : 'Criar tarefa' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- OVERLAY -->
+  <div class="overlay" *ngIf="exibirModal" (click)="fecharModal()"></div>
+
+</div>
